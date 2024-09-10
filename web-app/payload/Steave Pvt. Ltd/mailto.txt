@@ -1,0 +1,57 @@
+Hello. I have gotten so many great ideas and code from this forum that I have decided to add good functions for others to use. 
+This creates a javascript function which adds a custom mailto to an href or other object like image or DIV. When clicked it will add custom VARS to the BODY of the email. This is cool when you dont want to use a server side FORM to do this. It also lets the user use their email client of choice. 
+
+You could add this to an error page for instance, especially for an internal webapp. For public, you might wanna do this another way. My criteria required for me to do this with a non SS solution and also use the clients mail client of choice. 
+
+Tested in IE6 and FF2. Works fine when going to Outlook 2003. 
+
+
+<script type="text/javascript"> 
+function emailForm(){ 
+
+var daReferrer = document.referrer; 
+var email = "yours@email.com"; 
+var errorMsg = "here here here is the error error error error"; 
+var subject = "Exception Error"; 
+var body_message = "%0D%0D%0D%0DThank you "+name+" for submitting this error to us. Please tell us in the space above, what you were doing when the error occurred.%0D%0DReferring Page: "+daReferrer+" %0D%0DException Error Message:%0D-------------------------------------------%0D"+errorMsg; 
+
+var mailto_link = 'mailto:'+email+'?subject='+subject+'&body='+body_message; 
+
+win = window.open(mailto_link,'emailWindow'); 
+if (win && win.open &&!win.closed) win.close(); 
+} 
+</script> 
+
+<div style="border:2px solid black;padding:10px;"> 
+Please <a href="#" onclick="emailForm();">Email Support</a> 
+</div> 
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------// Sends an eMail to an given Address. 
+// Be aware, this function could be a usefull spam task.
+// 
+// Usage:
+// sendMail(var, var, var, var, var);
+// 1: String - SMTP-Server
+// 2: String - The Address from which the mail shoud be send
+// 3: String - The Address to which the mail should be send.
+// For more Recipient's, please provide a list seperated by ','
+// 4: String - Subject of the Mail
+// 5: String - The Message Text of the mail.
+//
+
+var xSMTP="Your SMTP Server";
+var xSender = "Sender eMail";
+var xRecipients = "Recipient1,Recipient2,...";
+var xSubject = "Hello World!";
+var xMessage = "This is the message";
+sendMail(xSMTP,xSender,xRecipients,xSubject,xMessage);
+
+
+----------------------------------------------------------------------------------------------------------------

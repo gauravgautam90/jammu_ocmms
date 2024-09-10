@@ -1,0 +1,1 @@
+class HotelWaterConsumptionMaster{	Long id	String name			    String toString(){        "$name"        }    static def constrains = {    		    }	}

@@ -1,0 +1,1 @@
+<g:select from="${lofficer}"  name="linkEmployee.id"> </g:select>

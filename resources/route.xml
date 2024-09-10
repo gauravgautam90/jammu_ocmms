@@ -1,0 +1,11 @@
+<route>
+	<red_small>1</red_small>
+	<red_medium>1</red_medium>
+	<red_large>1</red_large>
+	<green_small>3</green_small>
+	<green_medium>3</green_medium>
+	<green_large>2</green_large>
+	<others_small>2</others_small>
+	<others_medium>2</others_medium>
+	<others_large>2</others_large>
+</route>

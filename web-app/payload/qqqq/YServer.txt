@@ -1,0 +1,6 @@
+f90 f68 WinMain
+f90 f68    lpCmdLine: '/REGSERVER'
+f90 f68 Run
+f90 f68    lpCmdLine: '/REGSERVER'
+f90 f68    nCmdShow: 10
+f90 f68 leaving WinMain

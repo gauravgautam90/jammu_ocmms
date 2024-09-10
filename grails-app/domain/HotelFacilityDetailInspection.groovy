@@ -1,0 +1,1 @@
+class HotelFacilityDetailInspection{		Long id				HotelFacilityTypeMaster hotelFacilityType		HotelFacilityMaster facility		IndApplicationDetails application		String capacity		String facilityDetail							    String toString(){	        "$id"    	    }	    static def constrains = {	    			    }	}

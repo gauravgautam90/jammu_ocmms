@@ -1,0 +1,1 @@
+class HotelWasteEmissionDetail{		Long id		HotelWasteEmissionGenerationMaster type 		String quantity		String nature		String tmethod		IndApplicationDetails application					    String toString(){	        "$id"    	    }	    static def constrains = {	    			    }	}

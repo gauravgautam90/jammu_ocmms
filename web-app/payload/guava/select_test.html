@@ -1,0 +1,43 @@
+<html>
+<head>
+<script type="text/javascript">
+
+function makeDisable(){
+    var x=document.getElementById("aSelectControl1")
+ x.disabled=true
+}
+
+var selectmenu=document.getElementById("aSelectControl")
+ selectmenu.onchange=function makeEnable(){
+  
+   var chosenoption=this.options[this.selectedIndex]
+    if(chosenoption.value=="2"){
+
+    var x=document.getElementById("aSelectControl1")
+    x.disabled=false}
+}
+</script>
+</head>
+
+<body>
+<form>
+
+	
+        <select  id="aSelectControl">
+       <option value="1">Java</option>
+        <option value="2" >PHP</option>
+       <option value="3">Perl</option>
+        </select>
+
+<select disabled="true" id="aSelectControl1">
+  <option>honey</option>
+  <option>money</option>
+  <option>uuuuuu</option>
+</select>
+<!-- <input type="button" onclick="makeDisable()" value="Disable list">
+<input type="button" onclick="makeEnable()" value="Enable list"> -->
+</form>
+</body>
+
+</html>
+

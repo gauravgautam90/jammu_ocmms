@@ -1,0 +1,94 @@
+2009-07-09 14:46:14 ERROR  : ERROR:  null value in column "certificate_for" violates not-null constraint
+
+2009-07-10 15:19:37 ERROR  : ERROR:  null value in column "application_date" violates not-null constraint
+
+2009-07-10 15:19:48 ERROR  : ERROR:  null value in column "application_date" violates not-null constraint
+
+2009-07-10 15:19:51 ERROR  : ERROR:  null value in column "application_date" violates not-null constraint
+
+2009-07-10 15:19:57 ERROR  : ERROR:  null value in column "application_date" violates not-null constraint
+
+2009-07-10 15:20:00 ERROR  : ERROR:  null value in column "application_date" violates not-null constraint
+
+2009-07-10 15:20:03 ERROR  : ERROR:  null value in column "application_date" violates not-null constraint
+
+2009-07-10 15:20:07 ERROR  : ERROR:  null value in column "application_date" violates not-null constraint
+
+2009-07-17 20:02:30 ERROR  : ERROR:  null value in column "application_date" violates not-null constraint
+
+2009-07-17 20:02:35 ERROR  : ERROR:  null value in column "application_date" violates not-null constraint
+
+2009-07-17 20:02:46 ERROR  : ERROR:  null value in column "version" violates not-null constraint
+
+2009-07-20 16:12:57 ERROR  : ERROR:  update or delete on table "industry_reg_master" violates foreign key constraint "fk65f202b75de7d44" on table "ind_user"
+DETAIL:  Key (id)=(608) is still referenced from table "ind_user".
+
+2009-07-20 16:13:02 ERROR  : ERROR:  update or delete on table "industry_reg_master" violates foreign key constraint "fk65f202b75de7d44" on table "ind_user"
+DETAIL:  Key (id)=(607) is still referenced from table "ind_user".
+
+2009-07-20 16:13:04 ERROR  : ERROR:  update or delete on table "industry_reg_master" violates foreign key constraint "fk65f202b75de7d44" on table "ind_user"
+DETAIL:  Key (id)=(606) is still referenced from table "ind_user".
+
+2009-07-20 16:13:04 ERROR  : ERROR:  update or delete on table "industry_reg_master" violates foreign key constraint "fk65f202b75de7d44" on table "ind_user"
+DETAIL:  Key (id)=(605) is still referenced from table "ind_user".
+
+2009-07-20 16:13:05 ERROR  : ERROR:  update or delete on table "industry_reg_master" violates foreign key constraint "fk65f202b75de7d44" on table "ind_user"
+DETAIL:  Key (id)=(604) is still referenced from table "ind_user".
+
+2009-07-20 20:31:06 ERROR  : ERROR:  update or delete on table "ind_application_details" violates foreign key constraint "fk54ae56ab15ed9f5b" on table "application_pending_details"
+DETAIL:  Key (id)=(564) is still referenced from table "application_pending_details".
+
+2009-07-22 14:28:56 ERROR  : ERROR:  insert or update on table "ind_application_details" violates foreign key constraint "fk2a36cdf36a514567"
+DETAIL:  Key (ind_user_id)=(562) is not present in table "industry_reg_master".
+
+2009-07-22 14:30:02 ERROR  : ERROR:  null value in column "completion_status" violates not-null constraint
+
+2009-07-23 14:26:47 ERROR  : ERROR:  null value in column "date_created" violates not-null constraint
+
+2009-07-23 14:27:08 ERROR  : ERROR:  null value in column "group_desc" violates not-null constraint
+
+2009-07-23 14:27:12 ERROR  : ERROR:  null value in column "group_desc" violates not-null constraint
+
+2009-07-23 14:28:00 ERROR  : ERROR:  null value in column "last_updated" violates not-null constraint
+
+2009-07-23 14:28:04 ERROR  : ERROR:  null value in column "last_updated" violates not-null constraint
+
+2009-07-23 14:28:19 ERROR  : ERROR:  null value in column "last_updated" violates not-null constraint
+
+2009-07-23 14:38:09 ERROR  : ERROR:  invalid input syntax for type timestamp: "2009-07-13 14"
+
+2009-07-23 17:25:37 ERROR  : ERROR:  duplicate key value violates unique constraint "ind_application_details_pkey"
+
+2009-07-23 17:25:48 ERROR  : ERROR:  duplicate key value violates unique constraint "ind_application_details_pkey"
+
+2009-07-23 21:27:04 ERROR  : ERROR:  duplicate key value violates unique constraint "application_pending_details_pkey"
+
+2009-07-23 21:27:15 ERROR  : ERROR:  duplicate key value violates unique constraint "application_pending_details_pkey"
+
+2009-07-23 21:27:17 ERROR  : ERROR:  duplicate key value violates unique constraint "application_pending_details_pkey"
+
+2009-07-23 21:29:16 ERROR  : ERROR:  duplicate key value violates unique constraint "application_pending_details_pkey"
+
+2009-07-23 21:29:38 ERROR  : ERROR:  duplicate key value violates unique constraint "application_pending_details_pkey"
+
+2009-07-23 21:29:44 ERROR  : ERROR:  duplicate key value violates unique constraint "application_pending_details_pkey"
+
+2009-07-23 22:04:57 ERROR  : ERROR:  null value in column "application_status" violates not-null constraint
+
+2009-07-23 22:07:22 ERROR  : ERROR:  null value in column "application_id" violates not-null constraint
+
+2009-07-31 15:05:08 ERROR  : FATAL:  terminating connection due to administrator command
+server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+2009-07-31 15:05:10 ERROR  : FATAL:  terminating connection due to administrator command
+server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+2009-07-31 15:05:11 ERROR  : FATAL:  terminating connection due to administrator command
+server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+

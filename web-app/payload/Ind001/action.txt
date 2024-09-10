@@ -1,0 +1,167 @@
+    def certificate = {
+    	System.out.println("System.out.println111111111111"+params)
+    	println("session"+session.applId)
+      		def idAppl= (params.id).toLong()
+      		def indApplicationDetailsInstance=IndApplicationDetails.get(idAppl)
+      		System.out.println("indApplicationDetailsInstance"+indApplicationDetailsInstance)
+      		
+      		System.out.println("indApplicationDetailsInstance Name"+indApplicationDetailsInstance.getClass().getName())
+      		def indRegInstance=indApplicationDetailsInstance.indUser
+      		indRegInstance.refresh()
+      		println(indRegInstance.tehsil)
+      	def teh=indRegInstance.tehsil
+      	System.out.println(teh)
+      	def dis=indRegInstance.district
+      	System.out.println(dis)
+      	def dateSql=indApplicationDetailsInstance.applicationDate
+      	def abcFinal1=dateSql
+  		DateCustom dd1=new DateCustom()
+  		def dateCreated= (dd1.sQLdate1(abcFinal1))
+      	System.out.println("sssssssr"+dateCreated)
+      	
+      	def yr=(dateCreated.getYear()).toInteger()+1900
+      	System.out.println("yryryryryryryryryryryyr"+yr)
+      	def mon=(indApplicationDetailsInstance.applicationDate).getMonth()
+      	def dat=(indApplicationDetailsInstance.applicationDate).getDate()
+      	def abc=(indApplicationDetailsInstance.id).toString()
+      	System.out.println("aaaaaaaaaaa"+abc)
+      	def fileN="F/"+abc+"/"+dat+"/"+mon+"/"+yr
+//      		def teh1=TehsilMaster.get(16)
+//      		System.out.println(teh1)
+      		System.out.println("indRegInstance Name"+indRegInstance)
+      		render(view:'certificate',model:[indRegInstance:indRegInstance,indApplicationDetailsInstance:indApplicationDetailsInstance,fileN:fileN])
+      		
+      }
+      
+      def pdf = { 
+    	    System.out.println("System.out.println(params)"+params)
+    	
+    		def indApplicationDetailsInstance=IndApplicationDetails.get((params.idIndApp).toLong())
+      		def indRegInstance=indApplicationDetailsInstance.indUser
+      		System.out.println("params"+params)
+      	    System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"+(params.specificConditions).getClass().getName())
+      	
+      		def applFor=(indApplicationDetailsInstance.applicationFor).toUpperCase()
+      		println(applFor.getClass().getName()+applFor)
+      		def applType=(indApplicationDetailsInstance.applicationType).toUpperCase()
+      		println(applType.getClass().getName()+applType)
+      		def certFor=(indApplicationDetailsInstance.certificateFor).toUpperCase()
+      		println(certFor.getClass().getName()+certFor)
+      		def indCategory=(indRegInstance.category.name).toUpperCase()
+      		println(indCategory.getClass().getName()+indCategory)
+      		
+      		
+      		
+      			 	def id3=indApplicationDetailsInstance.indUser 
+      			 	println("getName()   "+id3.getClass().getName()+"  value  "+id3)		
+      			    			
+    	   def industryTypeMasterInstance=indApplicationDetailsInstance.indUser.industryType
+      		//def id1=1
+    		def id2=indApplicationDetailsInstance.applicationType
+    		def consentForVar=indApplicationDetailsInstance.certificateFor
+    		def applicationForVar=indApplicationDetailsInstance.applicationFor
+    		println("id2.getClass().getName()"+id2.getClass().getName())
+    			//def industryTypeMasterInstance=IndustryTypeMaster.get(id1)
+    			def applicationTypeMasterInstance=ApplicationTypeMaster.findWhere(consentType:id2)
+    			def conditionMasterList=ConditionMaster.findAllWhere(industryTypeMaster:industryTypeMasterInstance,applicationTypeMaster:applicationTypeMasterInstance,consentFor:consentForVar,applicationFor:applicationForVar,conditionType:'Specific')
+    		def sizeVal=conditionMasterList.size()
+    		println(sizeVal)
+      		def conditionArray = new String[sizeVal] 
+      		
+      		
+      			    			for(int i=0; i<conditionMasterList.size();i++)
+      			    			{
+      			    			
+      			    				conditionArray[i]=(conditionMasterList.get(i)).condition
+      			    				
+      			    			}
+      		
+      		
+    	    def conditionMasterListG=ConditionMaster.findAllWhere(industryTypeMaster:industryTypeMasterInstance,applicationTypeMaster:applicationTypeMasterInstance,consentFor:consentForVar,applicationFor:applicationForVar,conditionType:'General')
+      		def sizeValG=conditionMasterListG.size()
+    		println(sizeVal)
+      		def conditionArrayG = new String[sizeValG] 
+    	    
+    	    for(int i=0; i<conditionMasterListG.size();i++)
+  			{
+  			
+  				conditionArrayG[i]=(conditionMasterListG.get(i)).condition
+  				
+  			}
+    	    
+    	    
+      		def dateCreateOn=indApplicationDetailsInstance.applicationDate
+      		def abcFinal1=dateCreateOn
+  			DateCustom dd1=new DateCustom()
+  			def dateCreated= (dd1.sQLdate1(abcFinal1)).toString()
+      		
+      		def dDate=new Date()
+      		def abcFinal=dDate
+  			
+  			DateCustom dd=new DateCustom()
+  			def todayDate= (dd.sQLdate1(abcFinal)).toString()
+  		
+      		def val=params.pdfc
+      		def val2=params.pdfc2
+      		def val3=params.pdfc3
+//      		HelloWorld pdf1= new HelloWorld()
+//      		pdf1.pdfG(val) 
+//  			XandYcoordinates xy=new XandYcoordinates()
+//      		xy.xyCoordinates()
+      		
+      		DevImg dimg=new DevImg()
+      		def name=indRegInstance.indName
+      			def address=indRegInstance.indAddress
+//      			if(indRegInstance.tehsil){
+//      				
+      			def tehsil1=indRegInstance.tehsil.toString()
+      			System.out.println("tehsil111111"+tehsil1)
+//      			}
+      		//def tehsil="HardCoded"
+      			def district=(indRegInstance.district).toString()
+      			def fileN=params.fileNo
+      			def order="40001"
+      				def videNo="980"
+      					def subject=params.subject
+      					
+      					PdfGeneration pdfG=new PdfGeneration()
+      					
+      				pdfG.pdfFunction(todayDate,videNo,name,address,tehsil1,district,subject,fileN,dateCreated,conditionArray,conditionArrayG)
+      				
+      			
+//      				if(params.specificConditions!=null ||params.specificConditions!=""){	
+//      			    	if((params.specificConditions).getClass().getName()!="java.lang.String")
+//      			    		{
+//      			    		
+//      			    		
+//      			    	
+//      			    			def val1=params.specificConditions
+//      			    			def sizeVal=val1.size()
+//      			    			def val5 = new String[sizeVal];
+//
+//      			    			for(int i=0; i<val1.size();i++)
+//      			    			{
+//      			    				System.out.println(val1[i])
+//      			    				val5[i]=val1[i]
+//      			    			}
+//      			    			
+//      			    			
+//      			    			dimg.insImg1(todayDate,dateCreated,name,address,tehsil1,district,val5,fileN,order)
+//      			    		}
+//      			    		else
+//      			    		{
+//      			    			def val1=params.specificConditions
+//      			    			dimg.insImg(todayDate,dateCreated,name,address,tehsil1,district,val1,fileN,order)
+//      			    		}
+//      			    	}
+//      				else
+//      				{
+//      					System.out.println("pppppppppppppppppppppppppppppppppppp")
+//      				}
+//      			
+      			def link="link"
+      		
+      	render(view:'certificate',model:[indRegInstance:indRegInstance,indApplicationDetailsInstance:indApplicationDetailsInstance,fileN:fileN,link:link])
+      
+         	  
+      }

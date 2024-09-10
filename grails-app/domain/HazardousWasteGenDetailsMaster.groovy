@@ -1,0 +1,16 @@
+class HazardousWasteGenDetailsMaster{
+	Long id
+	String authFor
+	IndApplicationDetails application
+	HazardousSourceGenMaster sourceName
+	HazardousCategoryMaster categoryName
+	String quantity
+	
+	
+	String toString(){
+		
+	}
+	static def constrains = {
+		
+	}
+}

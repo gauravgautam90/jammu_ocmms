@@ -1,0 +1,1 @@
+<table><tr><td class="txt4"><span STYLE="word-wrap:  break-word; width: 100px;" >${distStr}</span></td></tr></table>

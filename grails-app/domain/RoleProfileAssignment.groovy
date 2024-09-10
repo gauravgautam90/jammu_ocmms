@@ -1,0 +1,3 @@
+import org.apache.commons.dbcp.datasources.UserPassKeyclass RoleProfileAssignment {
+	Long id
+	UserProfile primaryEmployee	UserProfile linkEmployee	RoleMaster role	String toString(){		"$role( $primaryEmployee )"	}    	static def constraints = {		role(unique:true,blank:false)		primaryEmployee(blank:false)		linkEmployee(blank:false)    }		static belongsTo = [primaryEmployee:UserProfile,linkEmployee:UserProfile,role:RoleMaster]    static mapping = {           //id generator:'assigned'               role lazy : false               linkEmployee lazy : false               primaryEmployee lazy : false       }}

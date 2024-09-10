@@ -1,0 +1,1154 @@
+import java.lang.Byte
+import sun.nio.cs.Surrogate
+import javax.mail.*;
+import SendMail;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.Date;
+import DateCustom;
+import org.springframework.web.multipart.MultipartFile;
+import java.security.MessageDigest;
+import java.util.Random;
+import sun.nio.cs.Surrogate
+import grails.converters.*
+import java.util.ArrayList
+import java.io.*;
+import grails.converters.*
+class IndustryRegMasterController {
+
+	boolean fileCheck(Byte[] bytes)
+	{
+		if(bytes[0]==37 && bytes[1]==80&& bytes[2]==68 &&bytes[3]==70 )
+		{
+			return true;
+		}
+		else if(bytes[0]==71 && bytes[1]==73&& bytes[2]==70 &&bytes[3]==56 )
+		{
+			return true;
+		}
+		else if(bytes[0]==255 && bytes[1]==216&& bytes[2]==255 &&bytes[3]==224 )
+		{
+			return true;
+		}
+		else if(bytes[0]==255 && bytes[1]==216 && bytes[2]==255 &&bytes[3]==225 )
+		{
+			return true;
+		}
+		
+		else
+		{
+			return false;
+		}
+	}
+	
+	Boolean  specialCharCheck(String field)
+	{
+		for(int i=0;i<field.size();i++)
+		{
+			char a=field.charAt(i)
+			
+			if(a=='<'||a=='>'||a=='+' ||a=='%' ||a=='^'|| a=='\''|| a=='='||a=='-'||a=='\"' || a=='\\' ||a=='$' ||a=='?' ||a=='&'||a=='#')
+			{
+				return false
+				
+			}
+			
+			
+		}
+		String field1=field.toLowerCase();
+		
+		if(field1.contains("script")|| field1.contains("delete")||field1.contains("drop")||field1.contains("select")||field1.contains("insert")||field1.contains("update")||field1.contains("select * from")||field1.contains("order by")||field1.contains("distinct")||field1.contains("create")||field1.contains("truncate")||field1.contains("alert")||field1.contains("javascript")||field1.contains("database")||field1.contains("function")||field1.contains("exec"))
+		{
+			return false
+		}
+		
+		return true
+	}
+	
+	 boolean PasswordCheck(String password1,String password2,String password3,String password4,String password5,String newPass)
+	   {
+		   if(password1==newPass)
+		   {
+			   return true;
+		   }
+		   else if(password2==newPass )
+		   {
+			   return true;
+		   }
+		   else if(password3==newPass )
+		   {
+			   return true;
+		   }
+		   else if(password4==newPass )
+		   {
+			   return true;
+		   }
+		   else if(password5==newPass )
+		   {
+			   return true;
+		   }
+		   else 
+		   {
+			   return false;
+		   }
+	   }
+	 String MD5_Encryption(String db_Password, String Salt)
+	    {
+		   String netJava=db_Password+Salt;
+		   String result = null;
+	  
+		   MessageDigest md5 = MessageDigest.getInstance("MD5");
+		   println netJava.getBytes();
+	       byte[] digest = md5.digest(netJava.getBytes());
+	       println digest
+	       StringBuffer hexString = new StringBuffer(); 
+	       for (int i=0;i<digest.length;i++) 
+	       {
+	    	 
+	    	  println Integer.toHexString(0xFF & digest[i])
+	    	  if((0xFF & digest[i])>0x0F)
+	    			  
+	    	  {
+	    		  hexString.append(Integer.toHexString(0xFF & digest[i]));  
+	    	  }
+	    	  else
+	    	  {
+	    		  switch(0xFF & digest[i])
+	    		  {
+	    		  case 0x00:
+	    			  hexString.append('00');  
+	    			  break;
+	    		  case 0x01:
+	    			  hexString.append('01');  
+	    			  break;
+	    		  case 0x02:
+	    			  hexString.append('02');  
+	    			  break;
+	    		  case 0x03:
+	    			  hexString.append('03');
+	    			  break;
+	    		  case 0x04:
+	    			  hexString.append('04');
+	    			  break;
+	    		  case 0x05:
+	    			  hexString.append('05');
+	    			  break;
+	    		  case 0x06:
+	    			  hexString.append('06');
+	    			  break;
+	    		  case 0x07:
+	    			  hexString.append('07');
+	    			  break;
+	    		  case 0x08:
+	    			  hexString.append('08');
+	    			  break;
+	    		  case 0x09:
+	    			  hexString.append('09');
+	    			  break;
+	    		  case 0x0A:
+	    			  hexString.append('0a');
+	    			  break;
+	    		  case 0x0B:
+	    			  hexString.append('0b');
+	    			  break;
+	    		  case 0x0C:
+	        	      hexString.append('0c');
+	        	      break;
+	        	  case 0x0D:
+	                  hexString.append('0d');
+	                  break;
+	              case 0x0E:
+	              	  hexString.append('0e');
+	              	break;
+	              case 0x0F:
+	       			  hexString.append('0f');
+
+	    			  
+	    		  
+	    		 
+	    			  
+	    			  
+	    		  }
+	    	  }
+	    	   
+	       }
+
+	          
+	         println hexString
+
+	        return hexString;
+	    }
+	  String MD5_Encryption1(String db_Password)
+	  {
+		   String netJava=db_Password;
+		   String result = null;
+
+		   MessageDigest md5 = MessageDigest.getInstance("MD5");
+		   println netJava.getBytes();
+	     byte[] digest = md5.digest(netJava.getBytes());
+	     println digest
+	     StringBuffer hexString = new StringBuffer(); 
+	     for (int i=0;i<digest.length;i++) 
+	     {
+	  	 
+	  	  println Integer.toHexString(0xFF & digest[i])
+	  	  if((0xFF & digest[i])>0x0F)
+	  			  
+	  	  {
+	  		  hexString.append(Integer.toHexString(0xFF & digest[i]));  
+	  	  }
+	  	  else
+	  	  {
+	  		  switch(0xFF & digest[i])
+	  		  {
+	  		  case 0x00:
+	  			  hexString.append('00');  
+	  			  break;
+	  		  case 0x01:
+	  			  hexString.append('01');  
+	  			  break;
+	  		  case 0x02:
+	  			  hexString.append('02');  
+	  			  break;
+	  		  case 0x03:
+	  			  hexString.append('03');
+	  			  break;
+	  		  case 0x04:
+	  			  hexString.append('04');
+	  			  break;
+	  		  case 0x05:
+	  			  hexString.append('05');
+	  			  break;
+	  		  case 0x06:
+	  			  hexString.append('06');
+	  			  break;
+	  		  case 0x07:
+	  			  hexString.append('07');
+	  			  break;
+	  		  case 0x08:
+	  			  hexString.append('08');
+	  			  break;
+	  		  case 0x09:
+	  			  hexString.append('09');
+	  			  break;
+	  		  case 0x0A:
+	  			  hexString.append('0a');
+	  			  break;
+	  		  case 0x0B:
+	  			  hexString.append('0b');
+	  			  break;
+	  		  case 0x0C:
+	      	      hexString.append('0c');
+	      	      break;
+	      	  case 0x0D:
+	                hexString.append('0d');
+	                break;
+	            case 0x0E:
+	            	  hexString.append('0e');
+	            	break;
+	            case 0x0F:
+	     			  hexString.append('0f');
+
+	  			  
+	  		  }
+	  	  }
+	  	   
+	     }
+
+	        
+	       println hexString
+
+	      return hexString;
+	  }
+		
+	
+	
+	
+	def index = { redirect(action:list,params:params)	}
+	def changePassword = {									if(session.userMaster!=null)			{			if(session.userMaster.accessLevel=='employee')			{				session.invalidate()	    		redirect(uri:'/index.gsp')	    		return			}			}	}
+	
+	// the delete, save and update actions only accept POST requests
+	static allowedMethods = [delete:'POST', save:'POST', update:'POST']
+	
+	def regUPd = {		redirect(action:list,params:params)
+	}
+	def list = {
+		params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
+		
+		def dList=IndustryRegMaster.list( params )
+		for(int p=0;p<dList.size();p++) {
+			def abcFinal=(dList.get(p)).dateCreated
+			System.out.println(abcFinal)
+			
+			DateCustom dd=new DateCustom()
+			def xyz= dd.toDate(abcFinal)
+			System.out.println(xyz.getClass().getName()+xyz)
+			(dList.get(p)).dateCreated=xyz
+			
+		}
+		[ industryRegMasterInstanceList: dList, industryRegMasterInstanceTotal: IndustryRegMaster.count() ]
+	}
+	def ajaxGetCities = {		
+	def country = IndCatMaster.get(params.id)
+	println("//////////////////////////////////////////////////////"+country?.cities)
+
+	def a = country.cities
+	a = a.sort{it.toString()}
+
+	render a as JSON
+	
+	}
+	def show = {
+		
+		def industryRegMasterInstance = IndustryRegMaster.get((params.id).toLong())
+		def abc = IndUser.findWhere(industryRegMaster:industryRegMasterInstance)
+		
+		def pass2 = params.passwordEncrypt
+		
+		if(!industryRegMasterInstance) {
+			flash.message = "Industry not found "
+			redirect(action:list)
+		}
+		else { render(view:'show',model:[ industryRegMasterInstance : industryRegMasterInstance , abc : abc , pass2:pass2] )
+			
+		}
+	}
+	
+def show1 = {
+		
+		def industryRegMasterInstance = IndustryRegMaster.get((params.id).toLong())
+		def abc = IndUser.findWhere(industryRegMaster:industryRegMasterInstance)
+		
+		def pass2 = params.passwordEncrypt
+		
+		if(!industryRegMasterInstance) {
+			flash.message = "Industry not found "
+			redirect(action:list)
+		}
+		else { render(view:'show1',model:[ industryRegMasterInstance : industryRegMasterInstance , abc : abc , pass2:pass2] )
+			
+		}
+	}
+	def showForIndustry = {
+		
+		def indUserObj = session.indUser
+		indUserObj.refresh() 
+		def industryRegMasterInstance = indUserObj.industryRegMaster
+		
+		//def industryRegMasterInstance = IndustryRegMaster.get((params.id).toLong())
+		def abc = IndUser.findWhere(industryRegMaster:industryRegMasterInstance)
+		//EncryptDecrypt decr = new EncryptDecrypt()    
+		def pass2 = abc.password
+		// def Password = decr.decryptedPassword(pass2)
+		// println(pass2)
+		//  println(Password)
+		
+		if(!industryRegMasterInstance) {
+			flash.message = "Industry not found "
+			redirect(action:list)
+		}
+		else { render(view:'show',model:[ industryRegMasterInstance : industryRegMasterInstance , abc : abc , pass2:pass2] )
+			
+		}
+	}
+	
+	
+	def delete = {
+		def industryRegMasterInstance = IndustryRegMaster.get( params.id )
+		if(industryRegMasterInstance) {
+			try {
+				industryRegMasterInstance.delete()
+				flash.message = "Industry  deleted"
+				redirect(action:list)
+			}
+			catch(org.springframework.dao.DataIntegrityViolationException e) {
+				flash.message = "Industry could not be deleted"
+				redirect(action:show,id:params.id1)
+			}
+		}
+		else {
+			flash.message = "Industry not found "
+			redirect(action:list)
+		}
+	}
+	
+	def edit = {
+		def industryRegMasterInstance = IndustryRegMaster.get(params.id1)
+				def indUserInstance = IndUser.findWhere(industryRegMaster:industryRegMasterInstance)		def districtList = DistrictMaster.list( sort:"districtName", order:"asc")		
+		if(!industryRegMasterInstance) {
+			flash.message = "Industry not found "
+			redirect(action:edit)
+		}
+		else {
+			return [ industryRegMasterInstance : industryRegMasterInstance,indUserInstance:indUserInstance,districtList:districtList]
+		}
+	}
+	
+	def update = {		IndProfilePdf pdfG1=new IndProfilePdf()		IndFileRecord file=new IndFileRecord()		File certFile
+		def industryRegMasterInstance = IndustryRegMaster.get( params.id )		def indUserInstance = IndUser.findWhere(industryRegMaster:industryRegMasterInstance)
+		if(industryRegMasterInstance) {
+			if(params.version) {
+				def version = params.version.toLong()
+				if(industryRegMasterInstance.version > version) {
+					
+					industryRegMasterInstance.errors.rejectValue("version", "industryRegMaster.optimistic.locking.failure", "Another user has updated this IndustryRegMaster while you were editing.")
+					render(view:'edit',model:[industryRegMasterInstance:industryRegMasterInstance])
+					return
+				}
+			}			println(industryRegMasterInstance.properties)			def districtMasterInstance = DistrictMaster.get(params.district.id)			industryRegMasterInstance.occAddress = params.occAddress
+			industryRegMasterInstance.properties = params			indUserInstance.properties =params						def date=new Date()			println(date)			DateCustom dd=new DateCustom()			def sqlD=dd.sQLdate(date)			def day=(date.getDate()).toString() 			def month=(date.getMonth()).toString()			println(month+"month")			def year=(date.getYear()+1900).toString() 			def dateStr=day+"/"+month+"/"+year			def login=(indUserInstance.id).toString()			def passwordStr=""			def iregId=industryRegMasterInstance.indRegNum			def iName=industryRegMasterInstance.indName			def iType=industryRegMasterInstance.industryType.industryType			def iOtherType=industryRegMasterInstance.indTypeOther			def iCategory=industryRegMasterInstance.category.name			def iYear=industryRegMasterInstance.dateOfComm			def iStatus=(industryRegMasterInstance.indStatus).toString()			def iCapInvest=(industryRegMasterInstance.indCapInvt).toString()			def iNewCapInvest=(industryRegMasterInstance.indNewCapInvt).toString()			def iAddress=industryRegMasterInstance.indAddress			def iCity=industryRegMasterInstance.indCity			def iDistrict=industryRegMasterInstance.district.districtName			def iTehsil=industryRegMasterInstance.tehsil.tehsilName			def iPin=industryRegMasterInstance.indPin			def iAreaC=industryRegMasterInstance.indPhoneCode			def iPhone=industryRegMasterInstance.indPhoneNo			def iFax=industryRegMasterInstance.indFaxNo			def iEmail=industryRegMasterInstance.indEmail			def oName=industryRegMasterInstance.occName			def oDesignation=industryRegMasterInstance.occDesignation			def oAddress=industryRegMasterInstance.occAddress			def oCity=industryRegMasterInstance.occCity			def oDistrict=industryRegMasterInstance.occDistrict			def oTehsil=industryRegMasterInstance.occTehsil			def oPin=industryRegMasterInstance.occPin			def oAreaC=industryRegMasterInstance.occPhoneCode			def oPhoneNum=industryRegMasterInstance.occPhoneNo			def oFaxNo=industryRegMasterInstance.occFaxNo			def oMobNo=industryRegMasterInstance.occMobile			def oEmail=industryRegMasterInstance.occEmail			def oHintQ=indUserInstance.hintQuestion			def oAns=indUserInstance.hintAnswer			def comMonth=industryRegMasterInstance.commMonth
+			if(!industryRegMasterInstance.hasErrors() && industryRegMasterInstance.save()) {
+								certFile = pdfG1.indProfileFunction(dateStr,login,passwordStr,iregId,iName,iType,iCategory,iYear,iStatus,iCapInvest,iNewCapInvest,iAddress,iCity,iDistrict,iTehsil,iPin,iAreaC,iPhone,iFax,iEmail,oName,oDesignation,oAddress,oCity,oDistrict,oTehsil,oPin,oAreaC,oPhoneNum,oFaxNo,oMobNo,oEmail,oHintQ,oAns,iOtherType,comMonth)				flash.message = "Industry ${params.indName} updated"								byte[] b = new byte[(int) certFile.length()];								FileInputStream fileInputStream = new FileInputStream(certFile);				fileInputStream.read(b);								def fileLength=certFile.length()				file.size = fileLength / 1024  //f.getSize() 				file.extension ="pdf"//extractExtension( f )				file.data=b;				file.name=iregId+".pdf"				file.description="Industry Profile Saved"				if(session.userMaster){					file.createdBy=session.userMaster					file.updatedBy=session.userMaster				}else {					file.createdBy=iName					file.updatedBy=iName				}				file.typeOfFile="IndustryProfile"				file.indUser=industryRegMasterInstance				println("link22222")				println("file : "+file.name)				if(!file.hasErrors() && file.save()) {					println("In save of binary")				} else {					println("In Else")					flash.userMessage = "File [${file.name}] has NOT not been uploaded."					// render(view: 'create', model: [file: file])					render(view:'create',model:[file:file,indUserInstance:indUserInstance,industryRegMasterInstance:industryRegMasterInstance])				}				
+				redirect(action:show,id:industryRegMasterInstance.id)
+			}
+			else {
+				render(view:'edit',model:[industryRegMasterInstance:industryRegMasterInstance,indUserInstance:indUserInstance])
+			}
+		}
+		else {
+			flash.message = "Industry not found "
+			redirect(action:edit,id:params.id)
+		}
+	}
+	
+	def create = {
+		def industryRegMasterInstance = new IndustryRegMaster()
+		industryRegMasterInstance.properties = params
+		def industryRegMaster1 = SurroundingMaster.list()		def districtList = DistrictMaster.list( sort:"districtName", order:"asc")		
+		println(industryRegMaster1)
+		return ['industryRegMasterInstance':industryRegMasterInstance,'industryRegMaster1':industryRegMaster1,'districtList':districtList]
+	}
+	def create1 = {
+		def industryRegMasterInstance = new IndustryRegMaster()
+		industryRegMasterInstance.properties = params
+		def industryRegMaster1 = SurroundingMaster.list()
+		def districtList = DistrictMaster.list( sort:"districtName", order:"asc")
+		
+		println(industryRegMaster1)
+		return ['industryRegMasterInstance':industryRegMasterInstance,'industryRegMaster1':industryRegMaster1,'districtList':districtList]
+	}
+	
+	def save = {		IndFileRecord file=new IndFileRecord()		File certFile		def expDate = params.expDate_value				IndProfilePdf pdfG=new IndProfilePdf()		println("paramsR"+params)		def industryRegMasterInstance = new IndustryRegMaster(params)		def sdfh = new SimpleDateFormat("MM/dd/yyyy"); 		def x = sdfh.parse(expDate);		//industryRegMasterInstance.expDate = x		println("expDate"+expDate)			industryRegMasterInstance.expDate =expDate		industryRegMasterInstance.occAddress = params.occAddress		industryRegMasterInstance.statusOfAppl = params.statusOfAppl		industryRegMasterInstance.statusOfAppl = params.statusOfAppl		industryRegMasterInstance.nameAddressPartners = params.nameAddressPartners		industryRegMasterInstance.noOfEmp = params.noOfEmp		industryRegMasterInstance.indTypeOther = params.indTypeOther		def checkCategory = params.category.id		println("VIVEK>>>>><<<<<<<<<<<<<<Industry Type"+params.indTypeOther)		def indUserInstance= new IndUser()		println("ANAMIKA>>>>>"+params.district.id)		def districtMasterInstance =  DistrictMaster.get(params.district.id)				def categoryId = params.category.id		def districtId = params.district.id				if(categoryId.equals('100')) {			flash.message= "please select category"			render(view:'create',model:[industryRegMasterInstance:industryRegMasterInstance,indUserInstance:indUserInstance])		}		if(districtId.equals('100')) {			flash.message= "please select industry distict"			render(view:'create',model:[industryRegMasterInstance:industryRegMasterInstance,indUserInstance:indUserInstance])		}				if((!session.userMaster) || (!session.indUser)){			industryRegMasterInstance.updatedBy=params.indName		}		else{			if(session.userMaster){				industryRegMasterInstance.updatedBy = session.userMaster			}else{				industryRegMasterInstance.updatedBy = session.indUser			}		}		if(session.userMaster){			industryRegMasterInstance.createdBy = session.userMaster		}		else{			industryRegMasterInstance.createdBy = params.indName		}				industryRegMasterInstance.indName=params.indName		industryRegMasterInstance.dateCreated = new Date()		industryRegMasterInstance.lastUpdated = new Date()		println(params.plotNo)		industryRegMasterInstance.plotNo = params.plotNo		industryRegMasterInstance.indCapInvtLand = params.indCapInvtLand.toLong()		industryRegMasterInstance.indCapInvtBuilding = params.indCapInvtBuilding.toLong()		industryRegMasterInstance.siteArea = params.siteArea		def indTypeInstance = IndTypeMaster.findWhere(name:"medium") 		def capInt =(params.indCapInvt)		println("CAPITAL IIIIIIIIII::"+capInt)		def indNewCapInvt =(params.indNewCapInvt).toLong()		println("CAPITAL IIIIIIIIII22222222222222222::"+indNewCapInvt)		def min =indTypeInstance.min		def max =indTypeInstance.max		if(capInt == "" ) {			flash.message= "please enter capital investment"			render(view:'create',model:[industryRegMasterInstance:industryRegMasterInstance,indUserInstance:indUserInstance])		}else{			if ((capInt.toLong()) >= max ) {				println("large")				def large = IndTypeMaster.findWhere(name:"large")				industryRegMasterInstance.indType = large			}else{								if((capInt.toLong()) <= min){					println("small")					def small = IndTypeMaster.findWhere(name:"small") 					industryRegMasterInstance.indType = small				}				else {					println("medium")					def medium = IndTypeMaster.findWhere(name:"medium") 					industryRegMasterInstance.indType = medium				}			}		}//		if(checkCategory.equals("9999")) {//			println("checkCategory........e"+checkCategory)//			flash.message= "please select industry category "//			render(view:'create',model:[industryRegMasterInstance:industryRegMasterInstance,indUserInstance:indUserInstance])//		}//		if(params.hintAnswer ==""){//			println("inIff78968fffffff")//			flash.message ="please enter hint answer"//			render(view:'create',model:[industryRegMasterInstance:industryRegMasterInstance])//		}//		else{//			println("inelseeeeeeeeeee")//			indUserInstance.hintAnswer=params.hintAnswer//		}				//industryRegMasterInstance.save()		if(industryRegMasterInstance.save()&& !industryRegMasterInstance.hasErrors()) {         			def pass =params.password			// EncryptDecrypt encr = new EncryptDecrypt()     			//def passEn =encr.encryptedPassword(pass)						indUserInstance.password=pass			indUserInstance.hintQuestion=params.hintQuestion			indUserInstance.hintAnswer=params.hintAnswer		println("indUserInstance.hintAnswer"+indUserInstance.hintAnswer)					if(session.userMaster){				indUserInstance.createdBy = session.userMaster			}			else{				indUserInstance.createdBy = params.indName			}			indUserInstance.dateCreated= new Date()			indUserInstance.industryRegMaster = industryRegMasterInstance			if(!districtMasterInstance){				flash.message ="please enter industry district"				render(view:'create',model:[industryRegMasterInstance:industryRegMasterInstance,indUserInstance:indUserInstance])			}			else{				//indUserInstance.id="I"+districtMasterInstance.districtCode+industryRegMasterInstance.id				indUserInstance.id=districtMasterInstance.districtCode+industryRegMasterInstance.id			}			indUserInstance.flag = 0			indUserInstance.save()			//        def indUnitNatureTransactionInstance = new IndUnitNatureTransaction()			//         def unitNature1 =params.unitNature.id			//             			//        def unitNatureInstance = UnitNatureMaster.get(unitNature1)			//        println("222222"+unitNatureInstance)			//        println("33333"+params.unitNature)			//      			//        indUnitNatureTransactionInstance.unitNature = unitNatureInstance			//        println(indUnitNatureTransactionInstance.unitNature)						//       try{			//        indUnitNatureTransactionInstance.indReg = industryRegMasterInstance			//        indUnitNatureTransactionInstance.save()			//        }			//       catch(org.springframework.dao.DataIntegrityViolationException e){			//    	 flash.message ="no industry registered"			//       }									/*---------Surrounding Site-----------*/						def surrList = SurroundingMaster.list()			def dList2			def dist1 = params.distance			def description = params.description			def j=0			//          def k=0			for(int i=0;i<surrList.size();i++){								def indSurroundingInstance = new IndSurrounding()				def surr = surrList.get(i)				println(surr)				def surrId = surr.surroundingName				println(surrId)				println("iiii  "+params[surrList.get(i).surroundingName])				if(params[surrList.get(i).surroundingName]=="on"){					def abc = (surrList.get(i)).id										println("hoooooooooooo"+(surrList.get(i)).id)					println(params.distance)					indSurroundingInstance.surrounding = surrList.get(i)					indSurroundingInstance.industryReg=industryRegMasterInstance															println("dist1[j]"+dist1[j])					indSurroundingInstance.distance = dist1[j]					println("indSurroundingInstance.distance "+indSurroundingInstance.distance )										println("description[j]"+description[j])					indSurroundingInstance.description = description[j]					println("indSurroundingInstance.description "+indSurroundingInstance.description )										indSurroundingInstance.save()					println("jjjjjjjjjjjjjjjjjjjjj"+j)									}								j=j + 1											}						println("222222")						/*---START--saving the uploaded document ------*/			/*			def uploadedFile = request.getFile('payload')			println("333333333333333")			if(!uploadedFile.empty){				println "Class: ${uploadedFile.class}"				println "Name: ${uploadedFile.name}"				println "OriginalFileName: ${uploadedFile.originalFilename}"				println "Size: ${uploadedFile.size}"				println "ContentType: ${uploadedFile.contentType}"								def webRootDir = servletContext.getRealPath("/")				def userDir = new File(webRootDir, "/payload/${params.indName}")				userDir.mkdirs()				uploadedFile.transferTo( new File( userDir, uploadedFile.originalFilename))			}			println("4444444")			*/			/*-----END saving the uploaded document ------*/						/* ----------------mail-------------*/									def mailPermit = params.radiobutton			println(params.radiobutton)			if(mailPermit.equals('yes')) {    println(params.radiobutton+"eeeeeeeeee")				if ((params.occEmail)) {					def recp = params.occEmail										String recept = recp										def userName = indUserInstance.id					def industryName = params.indName					def pass1= IndUser.findWhere(id:params.id)					def password = params.passwordEncrypt					println(password)					//String mymsg="hiii..your username is  "+userName+"  and Password is  "+  password					//println(mymsg)					SendMail mail = new SendMail()					mail.sendMail(recept,userName,password, industryName)					flash.message = "Mail has been Sent "									} 				else {					flash.message="please enter email-Id" 				}							}			else {							}						/*--------------end mail ----------*/			if(indUserInstance.hasErrors()){				indUserInstance.errors.allErrors.each {					println it				}			}			def date=new Date()						println(date)			DateCustom dd=new DateCustom()			def sqlD=dd.sQLdate(date)			def day=(date.getDate()).toString() 			def month=(date.getMonth()+1).toString()			println(month+"month")			def year=(date.getYear()+1900).toString() 			def dateStr=day+"/"+month+"/"+year			def login=(indUserInstance.id).toString()			def passwordStr=params.passwordEncrypt			def iregId=industryRegMasterInstance.indRegNum			def iName=industryRegMasterInstance.indName			def iType=industryRegMasterInstance.industryType.industryType			def iOtherType=industryRegMasterInstance.indTypeOther			def iCategory=industryRegMasterInstance.category.name			def iYear=industryRegMasterInstance.dateOfComm			def iStatus=(industryRegMasterInstance.indStatus).toString()			def iCapInvest=(industryRegMasterInstance.indCapInvt).toString()			def newCapInvestment=(industryRegMasterInstance.indNewCapInvt).toString()			def iAddress=industryRegMasterInstance.indAddress			def iCity=industryRegMasterInstance.indCity			def iDistrict=industryRegMasterInstance.district.districtName			def iTehsil=industryRegMasterInstance.tehsil.tehsilName			def iPin=industryRegMasterInstance.indPin			def iAreaC=industryRegMasterInstance.indPhoneCode			def iPhone=industryRegMasterInstance.indPhoneNo			def iFax=industryRegMasterInstance.indFaxNo			def iEmail=industryRegMasterInstance.indEmail			def oName=industryRegMasterInstance.occName			def oDesignation=industryRegMasterInstance.occDesignation			def oAddress=industryRegMasterInstance.occAddress			def oCity=industryRegMasterInstance.occCity			def oDistrict=params.occDistrict			def oTehsil=params.occTehsil			def oPin=industryRegMasterInstance.occPin			def oAreaC=industryRegMasterInstance.occPhoneCode			def oPhoneNum=industryRegMasterInstance.occPhoneNo			def oFaxNo=industryRegMasterInstance.occFaxNo			def oMobNo=industryRegMasterInstance.occMobile			def oEmail=industryRegMasterInstance.occEmail			def oHintQ=indUserInstance.hintQuestion			def oAns=indUserInstance.hintAnswer			def comMonth = industryRegMasterInstance.commMonth								if( !indUserInstance.hasErrors() && indUserInstance.save()&& !industryRegMasterInstance.hasErrors()) {								flash.message = "Industry Registration completed sucessfuly as User ID: ${indUserInstance.id} and Temporary Password: ${params.passwordEncrypt}. Please change your password."				certFile = pdfG.indProfileFunction(dateStr,login,passwordStr,iregId,iName,iType,iCategory,iYear,iStatus,iCapInvest,newCapInvestment,iAddress,iCity,iDistrict,iTehsil,iPin,iAreaC,iPhone,iFax,iEmail,oName,oDesignation,oAddress,oCity,oDistrict,oTehsil,oPin,oAreaC,oPhoneNum,oFaxNo,oMobNo,oEmail,oHintQ,oAns,iOtherType,comMonth)								println("certFile"+certFile.getClass().getName()+ certFile.length())				byte[] b = new byte[(int) certFile.length()];								FileInputStream fileInputStream = new FileInputStream(certFile);				fileInputStream.read(b);								def fileLength=certFile.length()				file.size = fileLength / 1024  //f.getSize() 				file.extension ="pdf"//extractExtension( f )				file.data=b;				file.name=iregId+".pdf"				file.description="Industry Profile Saved"				if(session.userMaster){					file.createdBy=session.userMaster					file.updatedBy=session.userMaster				}else {					file.createdBy=iName					file.updatedBy=iName				}				file.typeOfFile="IndustryProfile"				file.indUser=industryRegMasterInstance				println("link22222")				println("file : "+file.name)				if(!file.hasErrors() && file.save()) {					println("In save of binary")				} else {					println("In Else")					flash.userMessage = "File [${file.name}] has NOT not been uploaded."					// render(view: 'create', model: [file: file])					render(view:'create',model:[file:file,indUserInstance:indUserInstance,industryRegMasterInstance:industryRegMasterInstance])				}								redirect(action:show,id:industryRegMasterInstance.id)			}			else {								// flash.message="Industry not created"				render(view:'create',model:[indUserInstance:indUserInstance,industryRegMasterInstance:industryRegMasterInstance])			}		}		else{			industryRegMasterInstance.errors.each {				println it			}			def industryRegMaster1 = SurroundingMaster.list()			def districtList = DistrictMaster.list( sort:"districtName", order:"asc")						// flash.message="Industry not created"			render(view:'create',model:[districtList:districtList,industryRegMaster1:industryRegMaster1,indUserInstance:indUserInstance,industryRegMasterInstance:industryRegMasterInstance])		}			}
+	
+	def save1 = {
+		
+
+		IndFileRecord file=new IndFileRecord()
+		File certFile
+		def expDate = params.expDate_value
+		
+		IndProfilePdf pdfG=new IndProfilePdf()
+		println("paramsR"+params)
+		def industryRegMasterInstance = new IndustryRegMaster(params)
+		def sdfh = new SimpleDateFormat("MM/dd/yyyy"); 
+		def x = sdfh.parse(expDate);
+		//industryRegMasterInstance.expDate = x
+		println("expDate"+expDate)
+	
+		industryRegMasterInstance.expDate =expDate
+		industryRegMasterInstance.occAddress = params.occAddress
+		industryRegMasterInstance.statusOfAppl = params.statusOfAppl
+		industryRegMasterInstance.statusOfAppl = params.statusOfAppl
+		industryRegMasterInstance.nameAddressPartners = params.nameAddressPartners
+		industryRegMasterInstance.noOfEmp = params.noOfEmp
+		industryRegMasterInstance.indTypeOther = params.indTypeOther
+		def checkCategory = params.category.id
+		println("VIVEK>>>>><<<<<<<<<<<<<<Industry Type"+params.indTypeOther)
+		def indUserInstance= new IndUser()
+		println("ANAMIKA>>>>>"+params.district.id)
+		def districtMasterInstance =  DistrictMaster.get(params.district.id)
+		
+		def categoryId = params.category.id
+		def districtId = params.district.id
+		
+		if(categoryId.equals('100')) {
+			flash.message= "please select category"
+			render(view:'create1',model:[industryRegMasterInstance:industryRegMasterInstance,indUserInstance:indUserInstance])
+		}
+		if(districtId.equals('100')) {
+			flash.message= "please select industry distict"
+			render(view:'create1',model:[industryRegMasterInstance:industryRegMasterInstance,indUserInstance:indUserInstance])
+		}
+		
+		if((!session.userMaster) || (!session.indUser)){
+			industryRegMasterInstance.updatedBy=params.indName
+		}
+		else{
+			if(session.userMaster){
+				industryRegMasterInstance.updatedBy = session.userMaster
+			}else{
+				industryRegMasterInstance.updatedBy = session.indUser
+			}
+		}
+		if(session.userMaster){
+			industryRegMasterInstance.createdBy = session.userMaster
+		}
+		else{
+			industryRegMasterInstance.createdBy = params.indName
+		}
+		
+		industryRegMasterInstance.indName=params.indName
+		industryRegMasterInstance.dateCreated = new Date()
+		industryRegMasterInstance.lastUpdated = new Date()
+		println(params.plotNo)
+		industryRegMasterInstance.plotNo = params.plotNo
+		industryRegMasterInstance.indCapInvtLand = params.indCapInvtLand.toLong()
+		industryRegMasterInstance.indCapInvtBuilding = params.indCapInvtBuilding.toLong()
+		industryRegMasterInstance.siteArea = params.siteArea
+		def indTypeInstance = IndTypeMaster.findWhere(name:"medium") 
+		def capInt =(params.indCapInvt)
+		println("CAPITAL IIIIIIIIII::"+capInt)
+		def indNewCapInvt =(params.indNewCapInvt).toLong()
+		println("CAPITAL IIIIIIIIII22222222222222222::"+indNewCapInvt)
+		def min =indTypeInstance.min
+		def max =indTypeInstance.max
+		if(capInt == "" ) {
+			flash.message= "please enter capital investment"
+			render(view:'create1',model:[industryRegMasterInstance:industryRegMasterInstance,indUserInstance:indUserInstance])
+		}else{
+			if ((capInt.toLong()) >= max ) {
+				println("large")
+				def large = IndTypeMaster.findWhere(name:"large")
+				industryRegMasterInstance.indType = large
+			}else{
+				
+				if((capInt.toLong()) <= min){
+					println("small")
+					def small = IndTypeMaster.findWhere(name:"small") 
+					industryRegMasterInstance.indType = small
+				}
+				else {
+					println("medium")
+					def medium = IndTypeMaster.findWhere(name:"medium") 
+					industryRegMasterInstance.indType = medium
+				}
+			}
+		}
+//		if(checkCategory.equals("9999")) {
+//			println("checkCategory........e"+checkCategory)
+//			flash.message= "please select industry category "
+//			render(view:'create',model:[industryRegMasterInstance:industryRegMasterInstance,indUserInstance:indUserInstance])
+//		}
+//		if(params.hintAnswer ==""){
+//			println("inIff78968fffffff")
+//			flash.message ="please enter hint answer"
+//			render(view:'create',model:[industryRegMasterInstance:industryRegMasterInstance])
+//		}
+//		else{
+//			println("inelseeeeeeeeeee")
+//			indUserInstance.hintAnswer=params.hintAnswer
+//		}
+		
+		//industryRegMasterInstance.save()
+		if(industryRegMasterInstance.save()&& !industryRegMasterInstance.hasErrors()) {         
+			def pass =params.password
+			// EncryptDecrypt encr = new EncryptDecrypt()     
+			//def passEn =encr.encryptedPassword(pass)
+			
+			indUserInstance.password=pass
+			indUserInstance.hintQuestion=params.hintQuestion
+			indUserInstance.hintAnswer=params.hintAnswer
+		println("indUserInstance.hintAnswer"+indUserInstance.hintAnswer)
+		
+			if(session.userMaster){
+				indUserInstance.createdBy = session.userMaster
+			}
+			else{
+				indUserInstance.createdBy = params.indName
+			}
+			indUserInstance.dateCreated= new Date()
+			indUserInstance.industryRegMaster = industryRegMasterInstance
+			if(!districtMasterInstance){
+				flash.message ="please enter industry district"
+				render(view:'create1',model:[industryRegMasterInstance:industryRegMasterInstance,indUserInstance:indUserInstance])
+			}
+			else{
+				//indUserInstance.id="I"+districtMasterInstance.districtCode+industryRegMasterInstance.id
+				indUserInstance.id=districtMasterInstance.districtCode+industryRegMasterInstance.id
+			}
+			indUserInstance.flag = 0
+			indUserInstance.save()
+			//        def indUnitNatureTransactionInstance = new IndUnitNatureTransaction()
+			//         def unitNature1 =params.unitNature.id
+			//             
+			//        def unitNatureInstance = UnitNatureMaster.get(unitNature1)
+			//        println("222222"+unitNatureInstance)
+			//        println("33333"+params.unitNature)
+			//      
+			//        indUnitNatureTransactionInstance.unitNature = unitNatureInstance
+			//        println(indUnitNatureTransactionInstance.unitNature)
+			
+			//       try{
+			//        indUnitNatureTransactionInstance.indReg = industryRegMasterInstance
+			//        indUnitNatureTransactionInstance.save()
+			//        }
+			//       catch(org.springframework.dao.DataIntegrityViolationException e){
+			//    	 flash.message ="no industry registered"
+			//       }
+			
+			
+			/*---------Surrounding Site-----------*/
+			
+			def surrList = SurroundingMaster.list()
+			def dList2
+			def dist1 = params.distance
+			def description = params.description
+			def j=0
+			//          def k=0
+			for(int i=0;i<surrList.size();i++){
+				
+				def indSurroundingInstance = new IndSurrounding()
+				def surr = surrList.get(i)
+				println(surr)
+				def surrId = surr.surroundingName
+				println(surrId)
+				println("iiii  "+params[surrList.get(i).surroundingName])
+				if(params[surrList.get(i).surroundingName]=="on"){
+					def abc = (surrList.get(i)).id
+					
+					println("hoooooooooooo"+(surrList.get(i)).id)
+					println(params.distance)
+					indSurroundingInstance.surrounding = surrList.get(i)
+					indSurroundingInstance.industryReg=industryRegMasterInstance
+					
+					
+					println("dist1[j]"+dist1[j])
+					indSurroundingInstance.distance = dist1[j]
+					println("indSurroundingInstance.distance "+indSurroundingInstance.distance )
+					
+					println("description[j]"+description[j])
+					indSurroundingInstance.description = description[j]
+					println("indSurroundingInstance.description "+indSurroundingInstance.description )
+					
+					indSurroundingInstance.save()
+					println("jjjjjjjjjjjjjjjjjjjjj"+j)
+					
+				}
+				
+				j=j + 1
+				
+				
+			}
+			
+			println("222222")
+			
+			/*---START--saving the uploaded document ------*/
+			/*
+			def uploadedFile = request.getFile('payload')
+			println("333333333333333")
+			if(!uploadedFile.empty){
+				println "Class: ${uploadedFile.class}"
+				println "Name: ${uploadedFile.name}"
+				println "OriginalFileName: ${uploadedFile.originalFilename}"
+				println "Size: ${uploadedFile.size}"
+				println "ContentType: ${uploadedFile.contentType}"
+				
+				def webRootDir = servletContext.getRealPath("/")
+				def userDir = new File(webRootDir, "/payload/${params.indName}")
+				userDir.mkdirs()
+				uploadedFile.transferTo( new File( userDir, uploadedFile.originalFilename))
+			}
+			println("4444444")
+			*/
+			/*-----END saving the uploaded document ------*/
+			
+			/* ----------------mail-------------*/
+			
+			
+			def mailPermit = params.radiobutton
+			println(params.radiobutton)
+			if(mailPermit.equals('yes')) {    println(params.radiobutton+"eeeeeeeeee")
+				if ((params.occEmail)) {
+					def recp = params.occEmail
+					
+					String recept = recp
+					
+					def userName = indUserInstance.id
+					def industryName = params.indName
+					def pass1= IndUser.findWhere(id:params.id)
+					def password = params.passwordEncrypt
+					println(password)
+					//String mymsg="hiii..your username is  "+userName+"  and Password is  "+  password
+					//println(mymsg)
+					SendMail mail = new SendMail()
+					mail.sendMail(recept,userName,password, industryName)
+					flash.message = "Mail has been Sent "
+					
+				} 
+				else {
+					flash.message="please enter email-Id" 
+				}
+				
+			}
+			else {
+				
+			}
+			
+			/*--------------end mail ----------*/
+			if(indUserInstance.hasErrors()){
+				indUserInstance.errors.allErrors.each {
+					println it
+				}
+			}
+			def date=new Date()
+			
+			println(date)
+			DateCustom dd=new DateCustom()
+			def sqlD=dd.sQLdate(date)
+			def day=(date.getDate()).toString() 
+			def month=(date.getMonth()+1).toString()
+			println(month+"month")
+			def year=(date.getYear()+1900).toString() 
+			def dateStr=day+"/"+month+"/"+year
+			def login=(indUserInstance.id).toString()
+			def passwordStr=params.passwordEncrypt
+			def iregId=industryRegMasterInstance.indRegNum
+			def iName=industryRegMasterInstance.indName
+			def iType=industryRegMasterInstance.industryType.industryType
+			def iOtherType=industryRegMasterInstance.indTypeOther
+			def iCategory=industryRegMasterInstance.category.name
+			def iYear=industryRegMasterInstance.dateOfComm
+			def iStatus=(industryRegMasterInstance.indStatus).toString()
+			def iCapInvest=(industryRegMasterInstance.indCapInvt).toString()
+			def newCapInvestment=(industryRegMasterInstance.indNewCapInvt).toString()
+			def iAddress=industryRegMasterInstance.indAddress
+			def iCity=industryRegMasterInstance.indCity
+			def iDistrict=industryRegMasterInstance.district.districtName
+			def iTehsil=industryRegMasterInstance.tehsil.tehsilName
+			def iPin=industryRegMasterInstance.indPin
+			def iAreaC=industryRegMasterInstance.indPhoneCode
+			def iPhone=industryRegMasterInstance.indPhoneNo
+			def iFax=industryRegMasterInstance.indFaxNo
+			def iEmail=industryRegMasterInstance.indEmail
+			def oName=industryRegMasterInstance.occName
+			def oDesignation=industryRegMasterInstance.occDesignation
+			def oAddress=industryRegMasterInstance.occAddress
+			def oCity=industryRegMasterInstance.occCity
+			def oDistrict=params.occDistrict
+			def oTehsil=params.occTehsil
+			def oPin=industryRegMasterInstance.occPin
+			def oAreaC=industryRegMasterInstance.occPhoneCode
+			def oPhoneNum=industryRegMasterInstance.occPhoneNo
+			def oFaxNo=industryRegMasterInstance.occFaxNo
+			def oMobNo=industryRegMasterInstance.occMobile
+			def oEmail=industryRegMasterInstance.occEmail
+			def oHintQ=indUserInstance.hintQuestion
+			def oAns=indUserInstance.hintAnswer
+			def comMonth = industryRegMasterInstance.commMonth
+		
+			
+			if( !indUserInstance.hasErrors() && indUserInstance.save()&& !industryRegMasterInstance.hasErrors()) {
+				
+				flash.message = "Industry Registration completed sucessfuly as User ID: ${indUserInstance.id} and Temporary Password: ${params.passwordEncrypt}. Please change your password."
+				certFile = pdfG.indProfileFunction(dateStr,login,passwordStr,iregId,iName,iType,iCategory,iYear,iStatus,iCapInvest,newCapInvestment,iAddress,iCity,iDistrict,iTehsil,iPin,iAreaC,iPhone,iFax,iEmail,oName,oDesignation,oAddress,oCity,oDistrict,oTehsil,oPin,oAreaC,oPhoneNum,oFaxNo,oMobNo,oEmail,oHintQ,oAns,iOtherType,comMonth)
+				
+				println("certFile"+certFile.getClass().getName()+ certFile.length())
+				byte[] b = new byte[(int) certFile.length()];
+				
+				FileInputStream fileInputStream = new FileInputStream(certFile);
+				fileInputStream.read(b);
+				
+				def fileLength=certFile.length()
+				file.size = fileLength / 1024  //f.getSize() 
+				file.extension ="pdf"//extractExtension( f )
+				file.data=b;
+				file.name=iregId+".pdf"
+				file.description="Industry Profile Saved"
+				if(session.userMaster){
+					file.createdBy=session.userMaster
+					file.updatedBy=session.userMaster
+				}else {
+					file.createdBy=iName
+					file.updatedBy=iName
+				}
+				file.typeOfFile="IndustryProfile"
+				file.indUser=industryRegMasterInstance
+				println("link22222")
+				println("file : "+file.name)
+				if(!file.hasErrors() && file.save()) {
+					println("In save of binary")
+				} else {
+					println("In Else")
+					flash.userMessage = "File [${file.name}] has NOT not been uploaded."
+					// render(view: 'create', model: [file: file])
+					render(view:'create1',model:[file:file,indUserInstance:indUserInstance,industryRegMasterInstance:industryRegMasterInstance])
+				}
+				
+				redirect(action:show,id:industryRegMasterInstance.id)
+			}
+			else {
+				
+				// flash.message="Industry not created"
+				render(view:'create1',model:[indUserInstance:indUserInstance,industryRegMasterInstance:industryRegMasterInstance])
+			}
+		}
+		else{
+			industryRegMasterInstance.errors.each {
+				println it
+			}
+			def industryRegMaster1 = SurroundingMaster.list()
+			def districtList = DistrictMaster.list( sort:"districtName", order:"asc")
+			
+			// flash.message="Industry not created"
+			render(view:'create1',model:[districtList:districtList,industryRegMaster1:industryRegMaster1,indUserInstance:indUserInstance,industryRegMasterInstance:industryRegMasterInstance])
+		}
+		
+	
+	}	def downLoadingCertificate={		def appId=IndustryRegMaster.get((params.id).toLong())				def fileDownLoad = IndFileRecord.findAllByIndUser(appId,[max:1,sort:"dateCreated", order:"desc"])		def fileSingle=fileDownLoad.get(0);		response.setContentType( "application-xdownload")		response.setHeader("Content-Disposition", "attachment;filename=${fileSingle.name}")		response.getOutputStream() << new ByteArrayInputStream( fileSingle.data )			}	
+	def myAjax ={
+		def tehsilList
+		def a 
+		def dist
+		if(params.cont== '9999' ) {
+			
+			render g.select( width:'10', optionKey:'id',name:'tehsil.id', from:tehsilList)
+		}
+		else {
+			a = params.cont
+			dist = DistrictMaster.get(a)
+			//	 tehsilList = TehsilMaster.findAllByDistrict(dist)			tehsilList = TehsilMaster.findAll("from TehsilMaster tm where tm.district=? order by tm.tehsilName asc",[dist])
+			render g.select( width:'10', optionKey:'id',name:'tehsil.id', from:tehsilList(sort:'tehsilName')) 
+		}
+		
+	}
+	
+	def myAjax1 ={
+		def tehsilList1		def b 		def dist1		if(params.cont== '9999' ){			render g.select( width:'10', optionKey:'id',name:'occTehsil.id', from:tehsilList1)		}		else{			b = params.cont			dist1 = DistrictMaster.get(b)			// tehsilList1 = TehsilMaster.findAllByDistrict(dist1)			tehsilList1 = TehsilMaster.findAll("from TehsilMaster tm where tm.district=? order by tm.tehsilName asc",[dist1])			render g.select( width:'10', optionKey:'id',name:'occTehsil.id', from:tehsilList1)					}
+		
+	}////////////Start///////////////Vivek/////////////////////////////	def myAjaxIndustryType ={		def industryTypeList		def a 		def cat		if(params.cont== '9999' ) {						render g.select( width:'10', optionKey:'id',name:'industryType.id', from:industryTypeList)		}		else {			a = params.cont			cat = IndCatMaster.get(a)							industryTypeList = IndustryTypeMaster.findAll("from IndustryTypeMaster tm where tm.category=? order by tm.category asc",[cat])			render g.select( width:'10', optionKey:'id',name:'industryType.id', from:industryTypeList) 		}			}	/////////////////End///////////////Vivek///////////////////////
+	/*-------------ForgetPassword ----------------------*/
+	def forgetPassIND1 ={
+		//def industryRegMasterInstance1 = new UserMaster()
+		def industryRegMasterInstance = IndUser.findWhere(id:params['userName'])
+		
+		println(industryRegMasterInstance)
+		if(industryRegMasterInstance) {
+			
+			println(industryRegMasterInstance.hintQuestion)
+			render(view:'forgetPass2',model:[industryRegMasterInstance:industryRegMasterInstance])
+		}
+		
+		else if (!industryRegMasterInstance){
+			flash.message = "${params.id} does not exist"
+			render(view:'/forgetPassword',model:[industryRegMasterInstance:industryRegMasterInstance])	
+		}
+		
+	}
+	
+	def forgetPassIND2 ={
+		
+		def b  = params.hintAnswer  
+		def industryRegMasterInstance =IndUser.findWhere(id:params['userName'])
+		println(params.userName)
+		println(industryRegMasterInstance)
+		println(b)
+		
+		if (industryRegMasterInstance.hintAnswer.equals(b)){
+			
+			render(view:'forgetPass3',model:[industryRegMasterInstance:industryRegMasterInstance])
+		}
+		else { 
+			
+			flash.message = "your Answer does not match "
+			render(view:'forgetPass2',model:[industryRegMasterInstance:industryRegMasterInstance])
+		}
+	}
+	
+	def forgetPassIND3={
+		if(session.userMaster!=null)
+		{
+
+		if(session.userMaster.accessLevel=='employee')
+		{
+			session.invalidate()
+    		redirect(uri:'/index.gsp')
+    		return
+
+		}
+		}
+		def a = params.password1
+		def b = params.password2
+		println("params "+params.indUserId)
+		def industryRegMasterInstance = IndUser.get(params.indUserId)
+		
+		if (a.equals(b)) {
+			println("hiiiii")
+			println(industryRegMasterInstance)
+			if(industryRegMasterInstance) {
+				if(industryRegMasterInstance .lPass==null )
+    	    	{
+    				industryRegMasterInstance .password1=industryRegMasterInstance .password     		
+    				industryRegMasterInstance .lPass=1
+    	    		if(!industryRegMasterInstance .save())
+    	    		{
+    	    			industryRegMasterInstance .errors.each {
+    	    				println it
+    	    			}
+    	    		}
+    	    	}
+    			if( PasswordCheck(industryRegMasterInstance .password1,industryRegMasterInstance .password2,industryRegMasterInstance .password3,industryRegMasterInstance .password4,industryRegMasterInstance .password5,b))
+  			  {
+  				  flash.message="Password can not be a last 5 password"
+  					render(view:'forgetPass3',model:[industryRegMasterInstance:industryRegMasterInstance])
+  		    	  return
+  		    	
+  			  }
+  			  else
+  			  {
+  				  if(industryRegMasterInstance .lPass==0)
+  				  {
+  					  industryRegMasterInstance .lPass=1
+  					  industryRegMasterInstance .password1=b
+  				  }
+  				  else if(industryRegMasterInstance .lPass==1)
+  				  {
+  					  industryRegMasterInstance .lPass=2
+  					  industryRegMasterInstance .password2=b
+  				  }
+  				  else if(industryRegMasterInstance .lPass==2)
+  				  {
+  					  industryRegMasterInstance .lPass=3
+  					  industryRegMasterInstance .password3=b
+  				  }
+  				  else if(industryRegMasterInstance .lPass==3)
+  				  {
+  					  industryRegMasterInstance .lPass=4
+  					  industryRegMasterInstance .password4=b
+  				  }
+  				  else if(industryRegMasterInstance .lPass==4)
+  				  {
+  					  industryRegMasterInstance .lPass=0
+  					  industryRegMasterInstance .password5=b
+  				  }
+  				  
+  			  }
+				//EncryptDecrypt encr = new EncryptDecrypt()
+				//def newpass =encr.encryptedPassword(a)
+				//industryRegMasterInstance.password = newpass
+				industryRegMasterInstance.password = b
+				industryRegMasterInstance.logAttempt=0
+				industryRegMasterInstance.tempLog=0
+				industryRegMasterInstance.save()
+				flash.message = "your password has been Reset"
+				redirect(uri:"/indCatMaster/forgetPassword")
+			}
+			else {
+				flash.message = "Industry not found with id ${params.id}"
+				redirect(action:edit,id:params.id)
+			}
+			
+		}   
+		else {
+			flash.message="re-enter"
+			render(view:'forgetPass3',model:[industryRegMasterInstance:industryRegMasterInstance])
+		}
+	}
+	
+	
+	// def sendMail= {
+	//    	println("hello mail")
+	//    	def recp = params.occEmail
+	//    	String recept = recp
+	//    	def userName = params.id
+	//    	println(userName)
+	//    	EncryptDecrypt decr = new EncryptDecrypt()    
+	//    	def pass = params.password
+	//    	def pass1= IndUser.findWhere(id:params.id)
+	//        def pass2 = pass1.password
+	//        def Password = decr.decryptedPassword(pass2)
+	//    	def password = params.passwordEncrypt
+	//    	println(password)
+	//    	String mymsg="hiii..your username is  "+userName+"  and Password is  "+  password
+	//    	println(mymsg)
+	//		SendMail mail = new SendMail()
+	//    	mail.sendMail(recept,mymsg)
+	//    	flash.message = "Mail has been Sent "
+	//		send.sendMail(recept,mymsg)
+	//		render(view:'create')
+	//    	
+	//    	
+	//    	
+	//    }
+	
+	
+	def uploadFiles = {
+		//println "File text : " + params.uploadFilename.inputStream.text
+		params.uploadFilename.transferTo(new File('c:/SPCBfiles/filename.txt'))
+		flash.message = "file uploaded successfully"
+		render(view:'upload')
+	}
+	
+	def changePass ={		def indUserInstance = IndUser.get(params.id)		
+		println("aaaaaaa")
+		def indRegMasterInstance = IndUser.get(params.id)
+		println(indRegMasterInstance)
+		if(indRegMasterInstance) {
+			println("aaaqqqqqqq")
+			def old = params.old
+			println(old)
+			//EncryptDecrypt encr = new EncryptDecrypt()
+			//def oldencr = encr.encryptedPassword(old)
+			//println(oldencr)
+			def pass =indRegMasterInstance.password 
+			println(pass)
+			if (pass.equals(old)){
+				
+				def newpass1 =params.newPass1
+				def newpass2 =params.newPass2
+				
+				if(newpass1.equals(newpass2)){
+					//def newpass = encr.encryptedPassword(newpass2)
+					//indRegMasterInstance.password = newpass
+					indRegMasterInstance.password = newpass2
+					println(indRegMasterInstance.password)
+					if(indRegMasterInstance.save()){						def preFlag = indUserInstance.flag						if(preFlag==0){
+							flash.message = "your password has been Reset Please Login"							indUserInstance.flag = preFlag + 1
+							redirect(uri:"/index.gsp")						}else{							flash.message = "your password has been Reset"							indUserInstance.flag = preFlag + 1							render(view:'changePassword')						}					}
+				}
+				else {
+					flash.message= "New Password and Re Enter password Should be Same"
+					render(view:'changePassword')
+				}
+			}
+			else {
+				flash.message="please enter valid password"
+				render(view:'changePassword')
+			}
+		}
+		
+		else {
+			flash.message="User Not Find with This Id"
+			render(view:'changePassword')
+		}
+		
+	}
+	
+	
+	def industrySearch= {
+		def xyz5
+		def qwe
+		def startDate1=params.start_date_value
+		def endDate1=params.end_date_value
+		def x
+		def y
+		def totalRes
+		def  abcFinal
+		def checkDate
+		def indSearch= new IndustryRegMaster()
+		def abcR= new IndustryRegMaster()
+		int total;
+		println("entwered")
+		
+		params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
+		if(params.max) {
+			xyz5=(params.max).toInteger()
+		}
+		else {
+			xyz5=10
+		}
+		if(params.offset) {
+			qwe=(params.offset).toInteger()
+		}
+		else {
+			qwe=0
+		}
+		
+		
+		def paramList= new ArrayList()
+		paramList=params
+		
+		
+		if(params.searchOp=="IndId"){
+			def firstInput = (params.indName1).toLowerCase()			def input = firstInput+ '%' 
+			println(params.searchOp)			
+			abcR= IndustryRegMaster.findAll("from IndustryRegMaster as country where lower(country.indName) like :indName", [indName:input]) 
+			//indSearch = IndustryRegMaster.findAll("from IndustryRegMaster as country where country.indName= ? ", [input],[max:xyz5,offset:qwe])
+			indSearch = IndustryRegMaster.findAll("from IndustryRegMaster as country where lower(country.indName) like :indName", [indName:input],[max:xyz5,offset:qwe]) 						total=abcR.size()
+			//indSearch =IndustryRegMaster.findWhere(indName:params.indName1)
+			if(indSearch.getClass().getName()=="java.util.ArrayList"){
+				total= indSearch.size()
+				for(int p=0;p<total;p++) {if(indSearch)
+					abcFinal=(indSearch.get(p)).dateCreated
+					
+					DateCustom dd=new DateCustom()
+					def xyz= dd.toDate(abcFinal)
+					System.out.println(xyz.getClass().getName()+xyz)
+					(indSearch.get(p)).dateCreated=xyz
+				}
+			}
+			else { if(indSearch){
+					abcFinal=indSearch.dateCreated
+					DateCustom dd=new DateCustom()
+					def xyz= dd.toDate(abcFinal)
+					System.out.println(xyz.getClass().getName()+xyz)
+					indSearch.dateCreated=xyz
+					
+				}			}  
+		} 
+		
+		else {
+			if(params.searchOp=="indDate"){
+				
+				try {
+					def sdfh = new SimpleDateFormat("MM/dd/yyyy"); 
+					x = sdfh.parse(startDate1); //Date
+					y = sdfh.parse(endDate1);  //Date					checkDate="checked"
+				}
+				catch(Exception e) {
+					flash.message="please verify date range"
+					redirect(action:list)
+				}
+				if(checkDate){	
+					java.sql.Date sqlDate = new java.sql.Date(x.getTime())
+					java.sql.Date sqlDate2 = new java.sql.Date(y.getTime())	
+					sqlDate2.setDate((sqlDate2.getDate()+1))
+					System.out.println("ooooooooooooooooooo"+sqlDate2.getTime()-sqlDate.getTime())
+					System.out.println("Single Date"+sqlDate2)
+					
+					
+					if(startDate1 && endDate1) {
+						abcR=IndustryRegMaster.findAll("From IndustryRegMaster dateCheck where dateCheck.dateCreated >= ? and dateCheck.dateCreated <= ? ",  [sqlDate,sqlDate2] ); 
+						indSearch=IndustryRegMaster.findAll("From IndustryRegMaster dateCheck where dateCheck.dateCreated >= ? and dateCheck.dateCreated <= ? order by dateCheck.id",  [sqlDate,sqlDate2],[max:xyz5,offset:qwe] ); 
+						total=abcR.size()
+						
+						for(int p=0;p<indSearch.size();p++) {
+							abcFinal=(indSearch.get(p)).dateCreated
+							System.out.println(abcFinal)
+							
+							DateCustom dd=new DateCustom()
+							def xyz= dd.toDate(abcFinal)
+							System.out.println(xyz.getClass().getName()+xyz)
+							(indSearch.get(p)).dateCreated=xyz
+							
+						}
+					}  
+				}			}		}
+		
+		
+		if(indSearch){
+			render(view:'list',model:[indSearch:indSearch,indSearchTotal:IndustryRegMaster.count(),total:total,paramList:paramList])
+		}
+		else{
+			flash.message ="Record Not Found"
+			render(view:'list',model:[indSearch:indSearch])
+		}
+	}
+	
+	
+	def ajaxAutoComplete = {
+		
+		System.out.println("AJAX")
+		if(params.indName1) {
+			System.out.println("indName1"+params.indName1)			def firstInput = (params.indName1).toLowerCase()			def input = firstInput + '%' 
+			
+			System.out.println("input"+input)
+			def list = IndustryRegMaster.findAll("from IndustryRegMaster as country where lower(country.indName) like :indName", [indName:input]) 
+			System.out.println("list"+list)
+			StringBuffer idList = new StringBuffer() 
+			idList.append("<ul>")
+			list?.each{c -> idList.append("<li>" + c.indName+"</li>")			} 
+			idList.append("</ul>")   
+			render idList.toString()		}
+	}			/*------------Industry Master ........................*/		def industryMasterCreate = {		def industryRegMasterInstance = new IndustryRegMaster()		industryRegMasterInstance.properties = params		def industryRegMaster1 = SurroundingMaster.list()		println(industryRegMaster1)		render(view:'industryMasterCreate',model:['industryRegMasterInstance':industryRegMasterInstance,'industryRegMaster1':industryRegMaster1])			}	def industryMasterSave ={		def industryMasterInstance = new IndustryRegAdminMaster(params)		industryMasterInstance.indName = params.indName		industryMasterInstance.dateCreated = new Date()		industryMasterInstance.lastUpdated = new Date()		industryMasterInstance.plotNo = params.plotNo		industryMasterInstance.dateOfComm = params.dateOfComm		industryMasterInstance.indCapInvt = (params.indCapInvt).toLong()		industryMasterInstance.indAddress = params.indAddress				industryMasterInstance.indCity = params.indCity				industryMasterInstance.indPin =params.indPin		industryMasterInstance.indPhoneCode =params.indPhoneCode		industryMasterInstance.indPhoneNo =params.indPhoneNo		industryMasterInstance.indFaxCode =params.indFaxCode		industryMasterInstance.indFaxNo =params.indFaxNo		industryMasterInstance.indEmail =params.indEmail		industryMasterInstance.indRegNum =params.indRegNum		industryMasterInstance.createdBy ="abc"		industryMasterInstance.updatedBy ="abc"    	 		if(!industryMasterInstance.hasErrors() &&industryMasterInstance.save()) {			flash.message ="Industry Details has been saved" 			render(view:'industryMasterShow',model:[industryMasterInstance:industryMasterInstance]) 		}		else{			flash.message = "Industry Details not Saved"			render(view:'industryMasterCreate',model:[industryMasterInstance:industryMasterInstance])		}	}		def industryMasterEdit = {		def industryMasterInstance = IndustryRegAdminMaster.get(params.id1)				if(!industryMasterInstance) {			flash.message = "IndustryMaster not found "			redirect(action:industryMasterEdit)		}		else {			return [ industryMasterInstance : industryMasterInstance ]		}	}		def industryMasterUpdate = {		println(params)		println("dddddddaaaa")		def industryMasterInstance = IndustryRegAdminMaster.get( params.id )		if(industryMasterInstance) {			println("industryMasterInstance")			if(params.version) { println("i111111Instance2222")				def version = params.version.toLong()				if(industryMasterInstance.version > version) {					println("industryMasterInstance2222222222")					industryMasterInstance.errors.rejectValue("version", "industryRegAdminMaster.optimistic.locking.failure", "Another user has updated this IndustryRegMaster while you were editing.")					render(view:'industryMasterEdit',model:[industryMasterInstance:industryMasterInstance])					return				}			}			println(industryMasterInstance.properties)			industryMasterInstance.properties = params						if(!industryMasterInstance.hasErrors() && industryMasterInstance.save()) {								flash.message = "Industry  updated"				redirect(action:industryMasterShow,id:industryMasterInstance.id)			}			else {				flash.message = "IndustryMaster not found"				render(view:'industryMasterEdit',model:[industryMasterInstance:industryMasterInstance])			}		}		else {			flash.message = "IndustryMaster not found"			redirect(action:industryMasterEdit,id:params.id)		}	}		def industryMasterShow = {				def industryMasterInstance = IndustryRegAdminMaster.get((params.id).toLong())						if(!industryMasterInstance) {			flash.message = "IndustryMaster not found"			redirect(action:industryMasterList)		}		else { render(view:'industryMasterShow',model:[ industryMasterInstance : industryMasterInstance] )					}	}	def industryMasterList = {				params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)		[ industryMasterInstanceList: IndustryRegAdminMaster.list( params ), industryMasterInstanceTotal: IndustryRegAdminMaster.count() ]	}			/*-----------------SEARCH INDUSTRY MASTER--------------*/ 	def industryMasterSearch= {		def xyz5		def qwe		def startDate1=params.start_date_value		def endDate1=params.end_date_value		def x		def y		def totalRes		def  abcFinal		def checkDate		def indSearch= new IndustryRegAdminMaster()		def abcR= new IndustryRegAdminMaster()		int total;		println("entwered")				params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)		if(params.max) {			xyz5=(params.max).toInteger()		}		else {			xyz5=10		}		if(params.offset) {			qwe=(params.offset).toInteger()		}		else {			qwe=0		}						def paramList= new ArrayList()		paramList=params						if(params.searchOp=="IndId"){			def input = params.indName1			println(params.searchOp)			abcR= IndustryRegAdminMaster.findAll("from IndustryRegAdminMaster as country where country.indName= ? ", [input],[max:xyz5,offset:qwe])			indSearch = IndustryRegAdminMaster.findAll("from IndustryRegAdminMaster as country where country.indName= ? ", [input],[max:xyz5,offset:qwe])			total=abcR.size()			//indSearch =IndustryRegMaster.findWhere(indName:params.indName1)			if(indSearch.getClass().getName()=="java.util.ArrayList"){				total= indSearch.size()				for(int p=0;p<total;p++) {if(indSearch)					abcFinal=(indSearch.get(p)).dateCreated										DateCustom dd=new DateCustom()					def xyz= dd.toDate(abcFinal)					System.out.println(xyz.getClass().getName()+xyz)					(indSearch.get(p)).dateCreated=xyz				}			}			else { if(indSearch){					abcFinal=indSearch.dateCreated					DateCustom dd=new DateCustom()					def xyz= dd.toDate(abcFinal)					System.out.println(xyz.getClass().getName()+xyz)					indSearch.dateCreated=xyz									}			}  		} 				else {			if(params.searchOp=="indDate"){								try {					def sdfh = new SimpleDateFormat("MM/dd/yyyy"); 					x = sdfh.parse(startDate1); //Date					y = sdfh.parse(endDate1);  //Date					checkDate="checked"				}				catch(Exception e) {					flash.message="Please verify date range "					redirect(action:industryMasterList)				}				if(checkDate)	{						java.sql.Date sqlDate = new java.sql.Date(x.getTime())					java.sql.Date sqlDate2 = new java.sql.Date(y.getTime())						sqlDate2.setDate((sqlDate2.getDate()+1))					System.out.println("ooooooooooooooooooo"+sqlDate2.getTime()-sqlDate.getTime())					System.out.println("Single Date"+sqlDate2)															if(startDate1 && endDate1) {						abcR=IndustryRegAdminMaster.findAll("From IndustryRegAdminMaster dateCheck where dateCheck.dateCreated >= ? and dateCheck.dateCreated <= ? ",  [sqlDate,sqlDate2] ); 						indSearch=IndustryRegAdminMaster.findAll("From IndustryRegAdminMaster dateCheck where dateCheck.dateCreated >= ? and dateCheck.dateCreated <= ? order by dateCheck.id",  [sqlDate,sqlDate2],[max:xyz5,offset:qwe] ); 						total=abcR.size()												for(int p=0;p<indSearch.size();p++) {							abcFinal=(indSearch.get(p)).dateCreated							System.out.println(abcFinal)														DateCustom dd=new DateCustom()							def xyz= dd.toDate(abcFinal)							System.out.println(xyz.getClass().getName()+xyz)							(indSearch.get(p)).dateCreated=xyz													}					}  				}			}					} 		if(indSearch){			render(view:'industryMasterList',model:[indSearch:indSearch,indSearchTotal:IndustryRegAdminMaster.count(),total:total,paramList:paramList])		}		else{			flash.message ="Record Not Found"			render(view:'industryMasterList',model:[indSearch:indSearch])		}	}				def ajaxAutoComplete1 = {				System.out.println("AJAX")		if(params.indName1) {			System.out.println("indName1"+params.indName1)			def firstInput = (params.indName1).toLowerCase()			def input = firstInput+ '%' 			System.out.println("input"+input)			def list = IndustryRegAdminMaster.findAll("from IndustryRegAdminMaster as country where lower(country.indName) like :indName", [indName:input]) 			System.out.println("list"+list)			StringBuffer idList = new StringBuffer() 			idList.append("<ul>")			list?.each{c -> idList.append("<li>" + c.indName+"</li>")			} 			idList.append("</ul>")   			render idList.toString()		}	}		/*--------TEMPLATE INDUSTRY MASTER AJAX--------*/	def extractExtension( MultipartFile file ) {		String filename = file.getOriginalFilename()		return filename.substring(filename.lastIndexOf( "." ) + 1 )	}	def updateTemplate ={		println("ajax")		def industrydetailInstance		if(params.selectedValue=='xyz') {			println("ajax1")			//industrydetailInstance= new IndustryRegAdminMaster(params)			render (template:"selectIndDetails")//, model : ['industrydetailInstance' : industrydetailInstance])					}		else{			println("ajax2")			println(params.selectedValue)			industrydetailInstance = IndustryRegAdminMaster.findWhere(id:(params.selectedValue).toLong())			println(industrydetailInstance)			render (template:"selectIndDetails", model : [industrydetailInstance : industrydetailInstance])		}	}	/*----CLASS END------*/
+}

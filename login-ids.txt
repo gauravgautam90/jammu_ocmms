@@ -1,0 +1,45 @@
+local{
+
+    officer: {
+        employee: {
+            id: NIC001
+            password: anil#777
+        }
+
+        admin: {
+                id: 2080926
+                password: anil#777
+            }
+    }
+
+    industry{
+        cotton industry: {
+            id: COT29321
+            password: anil#777
+        }
+
+        Acme Corp: {
+            id: ACM35096
+            temp-password: 85585
+            password: anil#777
+
+        }
+
+    }
+
+}
+
+
+live {
+    admin :{
+        id : JKADMIN
+        password: admin@2018; new ==> anil@2018
+    }
+
+    industry :{
+        id: TES518130
+        password: 84556
+    }
+
+}
+

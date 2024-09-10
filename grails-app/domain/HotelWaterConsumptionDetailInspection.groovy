@@ -1,0 +1,1 @@
+class HotelWaterConsumptionDetailInspection{		Long id						HotelWaterConsumptionMaster type		String quantity		IndApplicationDetails application				String toString(){	        "$id"    	    }	    static def constrains = {	    			    }	}
